@@ -10,10 +10,51 @@ import UIKit
 
 final class ProfileViewController: UIViewController {
     
-    private var profileIcon: UIImageView?
-    private var nameLabel: UILabel?
-    private var loginLabel: UILabel?
-    private var descriptionLabel: UILabel?
+    private lazy var profileIcon: UIImageView = {
+        let profileImage = UIImage(named: "Profile")
+        let profileIcon = UIImageView()
+        profileIcon.translatesAutoresizingMaskIntoConstraints = false
+        profileIcon.image = profileImage
+        return profileIcon
+    }()
+    
+    private lazy var nameLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Екатерина Новикова"
+        label.font = UIFont.systemFont(ofSize: 23, weight: .bold)
+        label.textColor = .white
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private lazy var loginLabel: UILabel = {
+        let loginLabel = UILabel()
+        loginLabel.text = "@ekaterina_nov"
+        loginLabel.font = UIFont.systemFont(ofSize: 13)
+        loginLabel.textColor = .gray
+        loginLabel.translatesAutoresizingMaskIntoConstraints = false
+        return loginLabel
+    }()
+    
+    private lazy var descriptionLabel: UILabel = {
+        let descriptionLabel = UILabel()
+        descriptionLabel.text = "Hello, World!"
+        descriptionLabel.font = UIFont.systemFont(ofSize: 13)
+        descriptionLabel.textColor = .white
+        descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
+        return descriptionLabel
+    }()
+    
+    private lazy var logOutButton: UIButton = {
+        let buttonIcon = UIImage(named: "logout_button")?.withRenderingMode(.alwaysOriginal)
+        let logOutButton = UIButton.systemButton(
+            with: buttonIcon!,
+            target: self,
+            action: #selector(Self.didTapLogOutButton)
+        )
+        logOutButton.translatesAutoresizingMaskIntoConstraints = false
+        return logOutButton
+    }()
    
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,42 +62,6 @@ final class ProfileViewController: UIViewController {
     }
     
     func profileView() {
-        
-        let profileImage = UIImage(named: "Profile")
-        let profileIcon = UIImageView()
-        profileIcon.translatesAutoresizingMaskIntoConstraints = false
-        profileIcon.image = profileImage
-        self.profileIcon = profileIcon
-        
-        let nameLabel = UILabel()
-        nameLabel.text = "Екатерина Новикова"
-        nameLabel.font = UIFont.systemFont(ofSize: 23)
-        nameLabel.textColor = .white
-        nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        self.nameLabel = nameLabel
-        
-        let loginLabel = UILabel()
-        loginLabel.text = "@ekaterina_nov"
-        loginLabel.font = UIFont.systemFont(ofSize: 13)
-        loginLabel.textColor = .gray
-        loginLabel.translatesAutoresizingMaskIntoConstraints = false
-        self.loginLabel = loginLabel
-        
-        let descriptionLabel = UILabel()
-        descriptionLabel.text = "Hello, World!"
-        descriptionLabel.font = UIFont.systemFont(ofSize: 13)
-        descriptionLabel.textColor = .white
-        descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
-        self.descriptionLabel = descriptionLabel
-        
-        let buttonIcon = UIImage(named: "logout_button")
-        let logOutButton = UIButton.systemButton(
-            with: buttonIcon!,
-            target: self,
-            action: #selector(Self.didTapLogOutButton)
-        )
-        logOutButton.tintColor = .red
-        logOutButton.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(profileIcon)
         view.addSubview(nameLabel)
@@ -89,6 +94,7 @@ final class ProfileViewController: UIViewController {
     @objc
     private func didTapLogOutButton() {
         guard let viewController = storyboard?.instantiateViewController(withIdentifier: "tabBar") else {return}
-        present( viewController, animated: false)
+       present( viewController, animated: false)
+    
     }
 }
