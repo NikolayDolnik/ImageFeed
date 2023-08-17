@@ -29,7 +29,6 @@ class SingleImageViewController: UIViewController {
             applicationActivities: nil
         )
         present(share, animated: true, completion: nil)
-        
     }
     
     

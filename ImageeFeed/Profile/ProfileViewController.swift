@@ -93,8 +93,9 @@ final class ProfileViewController: UIViewController {
     }
     @objc
     private func didTapLogOutButton() {
-        guard let viewController = storyboard?.instantiateViewController(withIdentifier: "tabBar") else {return}
-       present( viewController, animated: false)
+      //  guard let viewController = storyboard?.instantiateViewController(withIdentifier: "tabBar") else {return}
+    //   present( viewController, animated: false)
+        self.dismiss(animated: true)
     
     }
 }
