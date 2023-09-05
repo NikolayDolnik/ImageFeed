@@ -4,11 +4,15 @@
 //
 //  Created by Dolnik Nikolay on 18.05.2023.
 //
-
-import Foundation
 import UIKit
+import Kingfisher
+
 
 final class ProfileViewController: UIViewController {
+    
+    private let profileService = ProfileService.shared
+    private let profileImageService = ProfileImageService.shared
+    private var profileImageServiceObserver: NSObjectProtocol?
     
     private lazy var profileIcon: UIImageView = {
         let profileImage = UIImage(named: "Profile")
@@ -55,20 +59,48 @@ final class ProfileViewController: UIViewController {
         logOutButton.translatesAutoresizingMaskIntoConstraints = false
         return logOutButton
     }()
-   
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        profileImageServiceObserver = NotificationCenter.default.addObserver(
+            forName: ProfileImageService.DidChangeNotification,
+            object: nil,
+            queue: .main) { [weak self] _ in
+                guard let self else {return}
+                self.updateAvatar()
+            }
         profileView()
+        loadProfile()
+        updateAvatar()
     }
     
-    func profileView() {
+    // MARK: - Private function
+    
+    private func updateAvatar(){
+        guard let profileImageURL = profileImageService.avatarURL,
+              let url = URL(string: profileImageURL)
+        else { return }
+        let processor = RoundCornerImageProcessor(cornerRadius: 61)
+        profileIcon.kf.setImage(with: url, options: [.processor(processor)])
+    }
+    
+    private func loadProfile() {
+        guard let profile = profileService.profile else {return print("ошибка обновления UI \(profileService.profile!)") }
+        self.nameLabel.text = profile.name
+        self.loginLabel.text = profile.logineName
+        self.descriptionLabel.text = profile.bio
+    }
+    
+    
+    private func profileView() {
         
         view.addSubview(profileIcon)
         view.addSubview(nameLabel)
         view.addSubview(loginLabel)
         view.addSubview(descriptionLabel)
         view.addSubview(logOutButton)
-        
+        view.backgroundColor = .init(named: "YP Black")
         NSLayoutConstraint.activate([
             profileIcon.heightAnchor.constraint(equalToConstant: 70),
             profileIcon.widthAnchor.constraint(equalToConstant: 70),
@@ -88,14 +120,16 @@ final class ProfileViewController: UIViewController {
             logOutButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 45),
             logOutButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16)
         ])
-        
-        
     }
+    
     @objc
     private func didTapLogOutButton() {
-      //  guard let viewController = storyboard?.instantiateViewController(withIdentifier: "tabBar") else {return}
-    //   present( viewController, animated: false)
-        self.dismiss(animated: true)
-    
+        // Очистить данные?
+        self.nameLabel.text = "Необходимо авторизироваться"
+        self.loginLabel.text = ""
+        self.descriptionLabel.text = ""
+        let profileBase = UIImage(named: "tab_profile_active")
+        profileIcon.image = profileBase
+        
     }
 }

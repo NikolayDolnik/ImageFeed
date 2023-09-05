@@ -6,7 +6,6 @@
 //
 
 import Foundation
-// Переместить в OAuth2Service ??
 
 struct OAuthTokenResponseBody : Decodable {
     let accesToken: String

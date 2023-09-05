@@ -1,0 +1,65 @@
+//
+//  ProfileResult.swift
+//  ImageeFeed
+//
+//  Created by Dolnik Nikolay on 22.08.2023.
+//
+
+import Foundation
+
+struct ProfileResult: Codable {
+    
+    let firstName: String
+    let lastName: String
+    let userName: String
+    let bio: String?
+    //let profileImage: URL
+    
+    private enum CodingKeys: String, CodingKey {
+        case firstName = "first_name"
+        case lastName = "last_name"
+        case userName = "username"
+        case bio = "bio"
+        //case profileImage = "profile_image"
+    }
+}
+
+struct Profile: Codable {
+    var userName: String
+    var name: String // = first_name + last_name
+    var logineName: String // = "@"+username
+    var bio: String // ProfileResult
+    //var profileImage: UIImage?
+   
+    // поменять на инит 
+    static func getProfile(_ profileInfo: ProfileResult) -> Profile {
+        let profile = Profile(
+            userName: profileInfo.userName,
+            name: profileInfo.firstName + " " + profileInfo.lastName,
+            logineName: "@" + profileInfo.userName,
+            bio: profileInfo.bio ?? "")
+        return  profile
+    }
+    
+}
+
+struct UserResult: Codable {
+    private var profileImage: [String:String]
+    
+    func imageSize(size: Size )-> String? {
+        profileImage[size.rawValue]
+    }
+    
+    private enum CodingKeys: String, CodingKey {
+        case profileImage = "profile_image"
+    }
+    
+    enum Size: String {
+        case small = "small"
+        case medium = "medium"
+        case large = "large"
+    }
+   
+}
+
+

@@ -11,7 +11,10 @@ final class OAuth2Service {
     static let shared = OAuth2Service()
     private let urlSession = URLSession.shared
     private let url = URL(string: "https://api.unsplash.com/me")!
-    // Перменная из учебника
+    private var lastCode: String?
+    private var task: URLSessionTask?
+    
+    
     private (set) var authToken: String? {
         get {
             return OAuth2TokenStorage().token
@@ -27,7 +30,28 @@ final class OAuth2Service {
      */
     
     func fetchAuthToken(_ code: String, completion: @escaping (Result<String, Error>) -> Void) {
+        assert(Thread.isMainThread)
+        if lastCode == code {return}
+        task?.cancel()
+        lastCode = code
+        
+        
         let request = authTokenRequest(code: code)
+        let task = urlSession.objectTask(for: request, completion: { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in
+            guard let self else { return } // TODO: - обработать ошибку
+            switch result {
+            case .success(let body):
+                let authToken = body.accesToken
+                self.authToken = authToken
+                completion(.success(authToken))
+                // вызвать обнуление
+                self.task = nil
+            case .failure(let error):
+                completion(.failure(error))
+                //обнуляем последний код, если есть ошибка
+                self.lastCode = nil
+            }})
+        /* старый кусок
         let task = object(for: request) { [weak self] result in
             guard let self = self else { return }
             switch result {
@@ -35,10 +59,16 @@ final class OAuth2Service {
                 let authToken = body.accesToken
                 self.authToken = authToken
                 completion(.success(authToken))
+                // вызвать обнуление
+                self.task = nil
             case .failure(let error):
                 completion(.failure(error))
+                //обнуляем последний код, если есть ошибка
+                self.lastCode = nil
             }
         }
+         */
+        self.task = task // зафиксим состояние запроса
         task.resume()
     }
 }
@@ -69,10 +99,6 @@ extension OAuth2Service {
             baseURL: DefaultBaseUrl
             )
     }
-    
-    
-    
-    
 }
 
 
