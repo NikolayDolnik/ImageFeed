@@ -10,10 +10,8 @@ import Foundation
 final class OAuth2Service {
     static let shared = OAuth2Service()
     private let urlSession = URLSession.shared
-    private let url = URL(string: "https://api.unsplash.com/me")!
     private var lastCode: String?
     private var task: URLSessionTask?
-    
     
     private (set) var authToken: String? {
         get {
@@ -24,10 +22,6 @@ final class OAuth2Service {
         }
     }
     
-    /*
-    let authToken = OAuth2TokenStorage().token
-    request.setValue("Bearer \(authToken)", forHTTPHeaderField: "Authorization")
-     */
     
     func fetchAuthToken(_ code: String, completion: @escaping (Result<String, Error>) -> Void) {
         assert(Thread.isMainThread)
@@ -35,40 +29,20 @@ final class OAuth2Service {
         task?.cancel()
         lastCode = code
         
-        
-        let request = authTokenRequest(code: code)
+        guard let request = authTokenRequest(code: code) else {return}
         let task = urlSession.objectTask(for: request, completion: { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in
-            guard let self else { return } // TODO: - обработать ошибку
+            guard let self else { return completion(.failure(NetworkError.loadError("Ошибка TokenRequest"))) }
             switch result {
             case .success(let body):
                 let authToken = body.accesToken
                 self.authToken = authToken
                 completion(.success(authToken))
-                // вызвать обнуление
                 self.task = nil
             case .failure(let error):
                 completion(.failure(error))
-                //обнуляем последний код, если есть ошибка
                 self.lastCode = nil
             }})
-        /* старый кусок
-        let task = object(for: request) { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .success(let body):
-                let authToken = body.accesToken
-                self.authToken = authToken
-                completion(.success(authToken))
-                // вызвать обнуление
-                self.task = nil
-            case .failure(let error):
-                completion(.failure(error))
-                //обнуляем последний код, если есть ошибка
-                self.lastCode = nil
-            }
-        }
-         */
-        self.task = task // зафиксим состояние запроса
+        self.task = task
         task.resume()
     }
 }
@@ -87,7 +61,7 @@ extension OAuth2Service {
         }
     }
     
-    private func authTokenRequest(code: String) -> URLRequest {
+    private func authTokenRequest(code: String) -> URLRequest? {
         URLRequest.makeHTTPRequest(
             path: "/oauth/token"
             + "?client_id=\(AccessKey)"
@@ -97,7 +71,7 @@ extension OAuth2Service {
             + "&&grant_type=authorization_code",
             httpMethod: "POST",
             baseURL: DefaultBaseUrl
-            )
+        )
     }
 }
 

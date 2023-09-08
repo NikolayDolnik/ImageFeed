@@ -13,6 +13,7 @@ final class ProfileViewController: UIViewController {
     private let profileService = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
     private var profileImageServiceObserver: NSObjectProtocol?
+    private let imageListService = ImageListService()
     
     private lazy var profileIcon: UIImageView = {
         let profileImage = UIImage(named: "Profile")
@@ -73,6 +74,7 @@ final class ProfileViewController: UIViewController {
         profileView()
         loadProfile()
         updateAvatar()
+        //imageListService.fetchPhotosNextpage{ result in print(result) }
     }
     
     // MARK: - Private function
@@ -86,7 +88,7 @@ final class ProfileViewController: UIViewController {
     }
     
     private func loadProfile() {
-        guard let profile = profileService.profile else {return print("ошибка обновления UI \(profileService.profile!)") }
+        guard let profile = profileService.profile else {return print("ошибка обновления UI") }
         self.nameLabel.text = profile.name
         self.loginLabel.text = profile.logineName
         self.descriptionLabel.text = profile.bio
@@ -100,7 +102,7 @@ final class ProfileViewController: UIViewController {
         view.addSubview(loginLabel)
         view.addSubview(descriptionLabel)
         view.addSubview(logOutButton)
-        view.backgroundColor = .init(named: "YP Black")
+        view.backgroundColor = .ypBlack
         NSLayoutConstraint.activate([
             profileIcon.heightAnchor.constraint(equalToConstant: 70),
             profileIcon.widthAnchor.constraint(equalToConstant: 70),
@@ -132,4 +134,8 @@ final class ProfileViewController: UIViewController {
         profileIcon.image = profileBase
         
     }
+}
+
+extension UIColor {
+    static let ypBlack = UIColor(named: "YP Black")
 }

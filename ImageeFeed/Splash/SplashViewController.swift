@@ -36,6 +36,48 @@ class SplashViewController: UIViewController {
         super.viewDidAppear(animated)
         authTest()
     }
+}
+
+
+// MARK: - Функции
+
+extension SplashViewController: AuthViewControllerDelegate {
+    
+    func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String) {
+        UIBlockingProgressHUD.show()
+        self.fetchOAuthToken(code)
+    }
+    
+    private func fetchOAuthToken(_ code: String) {
+        oauth2Service.fetchAuthToken(code) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let token):
+                self.fetchProfile(token: token)
+            case .failure:
+                UIBlockingProgressHUD.dismiss()
+                self.showAlert()
+            }
+        }
+    }
+    
+    private func fetchProfile(token: String){
+        profileService.fetchProfile(token) { result in
+            switch result {
+            case .success(let profile):
+                ProfileImageService.shared.fetchProfileImageURL(username: profile.userName) { result in print(result)}
+                UIBlockingProgressHUD.dismiss()
+                self.switchToTabBarController()
+            case .failure:
+                UIBlockingProgressHUD.dismiss()
+                self.showAlert()
+                break
+            }
+        }
+    }
+}
+
+extension SplashViewController {
     
     func authTest() {
         if oauth2TokenStorage.token != "" {
@@ -51,6 +93,12 @@ class SplashViewController: UIViewController {
         }
     }
     
+    func showAlert() {
+        let alert = UIAlertController(title: "«Что-то пошло не так(»", message: "«Не удалось войти в систему»", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "ОК", style: .default, handler: nil))
+        self.present(alert, animated: true)
+    }
+    
     private func switchToTabBarController() {
         guard
             let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
@@ -61,50 +109,6 @@ class SplashViewController: UIViewController {
             .instantiateViewController(identifier: "tabBar")
         window.rootViewController = tabBarController
     }
-}
-
-extension SplashViewController: AuthViewControllerDelegate {
-    
-    func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String) {
-        dismiss(animated: true) { [weak self] in
-            guard let self = self else { return }
-            UIBlockingProgressHUD.show()
-            self.fetchOAuthToken(code)
-        }
-    }
-    
-    private func fetchOAuthToken(_ code: String) {
-        oauth2Service.fetchAuthToken(code) { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .success(let token):
-                self.fetchProfile(token: token)
-            case .failure:
-                UIBlockingProgressHUD.dismiss()
-                let alert = UIAlertController(title: "«Что-то пошло не так(»", message: "«Не удалось войти в систему»", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "ОК", style: .default, handler: nil))
-                self.present(alert, animated: true)
-            }
-        }
-    }
-    
-    private func fetchProfile(token: String){
-        profileService.fetchProfile(token) { result in
-           // guard let self = self else {return print("Splash ошибка fetchProfile")}
-            switch result {
-            case .success(let profile):
-                UIBlockingProgressHUD.dismiss()
-                ProfileImageService.shared.fetchProfileImageURL(username: profile.userName) { result in print(result)}
-                self.switchToTabBarController()
-            case .failure:
-                UIBlockingProgressHUD.dismiss()
-                break
-            }
-        }
-    }
-}
-
-extension SplashViewController {
     
     private func splashView() {
         view.addSubview(splashIcon)
@@ -112,8 +116,8 @@ extension SplashViewController {
         NSLayoutConstraint.activate([
             splashIcon.heightAnchor.constraint(equalToConstant: 75),
             splashIcon.widthAnchor.constraint(equalToConstant: 72),
-            splashIcon.topAnchor.constraint(equalTo: view.bottomAnchor , constant: 0),
-            splashIcon.leadingAnchor.constraint(equalTo: view.centerXAnchor),
+            splashIcon.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            splashIcon.centerYAnchor.constraint(equalTo: view.centerYAnchor),
         ])
     }
     

@@ -37,6 +37,8 @@
 		99F28F932AA37B9800A1D59B /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 99F28F922AA37B9800A1D59B /* Kingfisher */; };
 		99F28F962AA3843A00A1D59B /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 99F28F952AA3843A00A1D59B /* SwiftKeychainWrapper */; };
 		99F28F982AA38A8D00A1D59B /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F28F972AA38A8D00A1D59B /* TabBarController.swift */; };
+		99F28F9B2AA748AC00A1D59B /* ImageListServie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F28F9A2AA748AC00A1D59B /* ImageListServie.swift */; };
+		99F28F9D2AA7491B00A1D59B /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F28F9C2AA7491B00A1D59B /* Photo.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -88,6 +90,8 @@
 		99F28F8D2A9503C500A1D59B /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		99F28F8F2A9756D100A1D59B /* ProfileImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageService.swift; sourceTree = "<group>"; };
 		99F28F972AA38A8D00A1D59B /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		99F28F9A2AA748AC00A1D59B /* ImageListServie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageListServie.swift; sourceTree = "<group>"; };
+		99F28F9C2AA7491B00A1D59B /* Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,8 +151,9 @@
 		9910D46D2A2F68B30088FEA8 /* Service Access Layer */ = {
 			isa = PBXGroup;
 			children = (
-				99F28F892A9502E200A1D59B /* 0Auth */,
+				99F28F992AA7488800A1D59B /* ImageListService */,
 				99F28F8A2A9502FF00A1D59B /* Profile */,
+				99F28F892A9502E200A1D59B /* 0Auth */,
 				9910D4642A277A110088FEA8 /* Constants.swift */,
 				9910D4742A30B7990088FEA8 /* HTTP Request .swift */,
 				99F28F842A93918A00A1D59B /* UIBlockingProgressHUD.swift */,
@@ -249,6 +254,15 @@
 				99F28F8F2A9756D100A1D59B /* ProfileImageService.swift */,
 			);
 			path = Profile;
+			sourceTree = "<group>";
+		};
+		99F28F992AA7488800A1D59B /* ImageListService */ = {
+			isa = PBXGroup;
+			children = (
+				99F28F9A2AA748AC00A1D59B /* ImageListServie.swift */,
+				99F28F9C2AA7491B00A1D59B /* Photo.swift */,
+			);
+			path = ImageListService;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -408,7 +422,9 @@
 				99E20F3D29FD66600088A8B6 /* ImageeFeed.xcdatamodeld in Sources */,
 				9910D4672A28D2330088FEA8 /* AuthViewController.swift in Sources */,
 				9910D4652A277A110088FEA8 /* Constants.swift in Sources */,
+				99F28F9D2AA7491B00A1D59B /* Photo.swift in Sources */,
 				99F28F802A86597700A1D59B /* SplashViewController.swift in Sources */,
+				99F28F9B2AA748AC00A1D59B /* ImageListServie.swift in Sources */,
 				99F28F902A9756D100A1D59B /* ProfileImageService.swift in Sources */,
 				99F28F982AA38A8D00A1D59B /* TabBarController.swift in Sources */,
 				99F28F8E2A9503C500A1D59B /* Profile.swift in Sources */,

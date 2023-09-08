@@ -9,6 +9,8 @@ import UIKit
 
 class ImagesListViewController: UIViewController {
     private let ShowSingleImageSegueIdentifier = "ShowSingleImage"
+   // private let imageListService = ImageListService()
+    private var photos: [Photo] = [] // массив загруженных фото
 
     @IBOutlet private var tableView: UITableView!
     
@@ -52,7 +54,6 @@ extension ImagesListViewController {
             guard let buttonIcon = (indexPath.row % 2 == 0 ? UIImage(named: "Favorites Active") : UIImage(named: "Favorites No Active")) else { return UIImage(named: "Favorites Active") }
             return buttonIcon
         }
-        
         cell.cellImage.image = image
         cell.dateLabel.text = dateFormatter.string(from: Date())
         cell.likeButton.setImage(icon(), for: .normal)
@@ -81,6 +82,7 @@ extension ImagesListViewController: UITableViewDelegate {
 
 extension ImagesListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // TODO: - заменить количество ячеек
         return photosName.count
     }
     
@@ -90,11 +92,29 @@ extension ImagesListViewController: UITableViewDataSource {
         guard let imageListCell = cell as? ImagesListCell else {
             return UITableViewCell()
         }
-        
         configCell(for: imageListCell, with: indexPath)
         return imageListCell
     }
-
+   /*
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        //Проверить условие последней ячейки и вызывать fetchPhotos..
+        if indexPath.row + 1 == photos.count {
+            imageListService.fetchPhotosNextpage { [weak self] result in
+                guard let self = self else {return print("ошибка TableView")}
+                switch result {
+                case .success( let photo):
+                    self.photos = photo
+                case .failure:
+                    let alert = UIAlertController(title: "«Что-то пошло не так(»", message: "«Не удалось загрузить ленту»", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "ОК", style: .default, handler: nil))
+                    self.present(alert, animated: true)
+                }
+            }
+        } else {
+            return // если ячейка не последняя
+        }
+    }
+    */
 }
 
 
