@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+/*
 final class ImageListService {
     private var lastLoadedPage: Int?
     private (set) var photos: [Photo] = []
@@ -93,5 +93,6 @@ extension ImageListService {
     }
     
 }
+ */
 
 
