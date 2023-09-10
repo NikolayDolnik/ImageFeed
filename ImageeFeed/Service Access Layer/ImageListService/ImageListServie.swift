@@ -6,7 +6,7 @@
 //
 
 import UIKit
-/*
+
 final class ImageListService {
     private var lastLoadedPage: Int?
     private (set) var photos: [Photo] = []
@@ -26,24 +26,24 @@ final class ImageListService {
         page+=1
         
         //Делаем загрузку нужной странички - получаем массив из 10 карточек
+        
         photoPageReguest(page: page, completion: { [weak self] result in
             guard let self = self else { return }
             switch result{
             case .success(let photos):
-                self.photos = photos
+                self.photos += photos
                 self.taskFree = true
                 NotificationCenter.default
                     .post(
                         name: ImageListService.DidChangeNotification,
                         object: self,
                         userInfo: ["URL": self.photos])
-            case .failure():
+            case .failure:
                 print("Ошибка")
             }
         })
     }
-    
-    
+
     
 }
 
@@ -93,6 +93,6 @@ extension ImageListService {
     }
     
 }
- */
+ 
 
 

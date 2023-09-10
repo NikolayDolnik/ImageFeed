@@ -15,6 +15,7 @@ struct Photo {
     let thumbImageURl: String
     let largeImgaeURL:String
     let isLiked: Bool
+  
     
     static func getPhoto(photo: PhotoResult )-> Photo {
        let photo = Photo( id: photo.id,

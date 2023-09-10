@@ -82,38 +82,6 @@
             endingLineNumber = "77"
             landmarkName = "viewDidLoad()"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "B65FF397-6E2A-4154-B21C-28DD00FFE7BE - c696e8e50c403ccf"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ImageeFeed.ProfileViewController.viewDidLoad() -&gt; ()"
-                  moduleName = "ImageeFeed"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/dolniknikolay/Desktop/iOS/ImageeFeed/ImageeFeed/Profile/ProfileViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "77"
-                  endingLineNumber = "77"
-                  offsetFromSymbolStart = "844">
-               </Location>
-               <Location
-                  uuid = "B65FF397-6E2A-4154-B21C-28DD00FFE7BE - e914d20f77e9f71d"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #2 (Swift.Result&lt;Swift.Array&lt;ImageeFeed.Photo&gt;, Swift.Error&gt;) -&gt; () in ImageeFeed.ProfileViewController.viewDidLoad() -&gt; ()"
-                  moduleName = "ImageeFeed"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/dolniknikolay/Desktop/iOS/ImageeFeed/ImageeFeed/Profile/ProfileViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "77"
-                  endingLineNumber = "77"
-                  offsetFromSymbolStart = "80">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
