@@ -13,7 +13,7 @@ final class ProfileViewController: UIViewController {
     private let profileService = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
     private var profileImageServiceObserver: NSObjectProtocol?
-    private let imageListService = ImageListService()
+    //private let imageListService = ImageListService()
     
     private lazy var profileIcon: UIImageView = {
         let profileImage = UIImage(named: "Profile")
@@ -83,7 +83,7 @@ final class ProfileViewController: UIViewController {
         guard let profileImageURL = profileImageService.avatarURL,
               let url = URL(string: profileImageURL)
         else { return }
-        let processor = RoundCornerImageProcessor(cornerRadius: 61)
+        let processor = RoundCornerImageProcessor(cornerRadius: 35)
         profileIcon.kf.setImage(with: url, options: [.processor(processor)])
     }
     

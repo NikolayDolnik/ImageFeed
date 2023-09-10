@@ -62,15 +62,14 @@ extension URLSession {
         }
         let session = URLSession.shared
         let task = session.dataTask(with: reguest, completionHandler: { data, response, error in
-            if let data, let response = response, let statusCode = (response as? HTTPURLResponse)?.statusCode {
-                if 200..<300 ~= statusCode {
+            if let data, let response = response, let statusCode = (response as? HTTPURLResponse)?.statusCode, 200..<300 ~= statusCode {
+                
                     do {
                         let result = try JSONDecoder().decode(T.self , from: data) // Правильно ли тип Т
                         fulfillCompletion(.success(result))
                     } catch {
                         fulfillCompletion(.failure(NetworkError.httpStatusCode(statusCode)))
                     }
-                }
             } else if let error = error {
                 fulfillCompletion(.failure(NetworkError.urlRequestError(error)))
             } else {

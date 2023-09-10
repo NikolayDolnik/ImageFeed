@@ -81,7 +81,6 @@ extension SplashViewController {
     
     func authTest() {
         if oauth2TokenStorage.token != "" {
-            switchToTabBarController()
             self.fetchProfile(token: oauth2TokenStorage.token)
         } else {
             let authViewController = UIStoryboard(name: "Main", bundle: .main)
@@ -96,7 +95,7 @@ extension SplashViewController {
     func showAlert() {
         let alert = UIAlertController(title: "«Что-то пошло не так(»", message: "«Не удалось войти в систему»", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "ОК", style: .default, handler: nil))
-        self.present(alert, animated: true)
+        (presentedViewController ?? self).present(alert, animated: true)
     }
     
     private func switchToTabBarController() {
