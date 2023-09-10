@@ -10,7 +10,7 @@ import Foundation
 struct Photo {
     let id: String
     let size: CGSize
-    let createdAt: Date
+    let createdAt: Date?
     let welcomeDescription: String?
     let thumbImageURl: String
     let largeImgaeURL:String
@@ -19,7 +19,7 @@ struct Photo {
     static func getPhoto(photo: PhotoResult )-> Photo {
        let photo = Photo( id: photo.id,
                            size: CGSize(width: photo.sizeWight, height: photo.sizeHeight),
-                           createdAt: DateFormatter().date(from: photo.createdAt) ?? Date(),
+                           createdAt: DateFormatter().date(from: photo.createdAt ?? "") ,
                            welcomeDescription: photo.welcomeDescription ?? "",
                            thumbImageURl: photo.urlsPhoto[Size.thumb.rawValue] ?? "",
                            largeImgaeURL: photo.urlsPhoto[Size.large.rawValue] ?? "",
@@ -37,8 +37,8 @@ struct PhotoResult: Codable {
     let id: String
     let sizeWight: Double
     let sizeHeight: Double
-    let createdAt: String
-    let updatedAt: String
+    let createdAt: String?
+    let updatedAt: String?
     let color: String
     let blurHash: String
     let likes: Int
