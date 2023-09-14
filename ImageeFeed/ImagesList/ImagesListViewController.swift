@@ -7,6 +7,7 @@
 
 import UIKit
 import Kingfisher
+import ProgressHUD
 
 
 class ImagesListViewController: UIViewController {
@@ -20,7 +21,7 @@ class ImagesListViewController: UIViewController {
     private let photosName: [String] = Array(0..<20).map{"\($0)"}
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateStyle = .long
+        formatter.dateStyle = .medium
         formatter.timeStyle = .none
         return formatter
     }()
@@ -42,9 +43,8 @@ class ImagesListViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == ShowSingleImageSegueIdentifier {
             let viewController = segue.destination as! SingleImageViewController
-            let indexPath = sender as! IndexPath
-            let image = UIImage(named: photosName[indexPath.row])
-            viewController.image = image
+            let largeImageUrl = sender as! String
+            viewController.imageUrl = largeImageUrl
         } else {
             super.prepare(for: segue, sender: sender)
         }
@@ -91,67 +91,65 @@ extension ImagesListViewController {
         if let createdAd = photo.createdAt {
             cell.dateLabel.text = dateFormatter.string(from: createdAd)
         } else {
+            print("Date - \(photo.createdAt)")
             cell.dateLabel.text = ""
         }
-        //показывать лоадер в ячейки
-        
-        cell.cellImage.kf.setImage(with: url) // в замыкании обновить ячейку
+        cell.delegate = self
+        cell.cellImage.kf.indicatorType = .activity
+        cell.cellImage.kf.indicator?.startAnimatingView()
+        cell.cellImage.kf.setImage(with: url){_ in
+            cell.cellImage.kf.indicator?.stopAnimatingView()
+            self.tableView.reloadRows(at: [indexPath], with: .automatic)
+        }
         let likeImage = photo.isLiked ? UIImage(named: "Favorites Active") : UIImage(named: "Favorites No Active")
         cell.likeButton.setImage(likeImage, for: .normal)
     }
 }
 
-extension ImagesListViewController {
-    func configCell(for cell: ImagesListCell, with indexPath: IndexPath){
-        
-        guard let image = UIImage(named: "\(indexPath.row)") else {
-            return
+extension ImagesListViewController: ImagesListCellDelegate {
+    func imageListCellDidTapLike(_ cell: ImagesListCell) {
+        guard let indexPath = tableView.indexPath(for: cell) else { return }
+        let photo = photos[indexPath.row]
+        UIBlockingProgressHUD.show()
+        cell.setIsLike(like: photo.isLiked)
+        imageListService.likeChangeReguest(photo: photo) { [weak self] result in
+            guard let self = self else {return}
+            switch result{
+            case .success(let photos):
+                self.photos = photos
+                UIBlockingProgressHUD.dismiss()
+            case .failure:
+                UIBlockingProgressHUD.dismiss()
+                cell.setIsLike(like: !photo.isLiked)
+                self.showAlert()
+            }
         }
-        
-        func icon()-> UIImage? {
-            guard let buttonIcon = (indexPath.row % 2 == 0 ? UIImage(named: "Favorites Active") : UIImage(named: "Favorites No Active")) else { return UIImage(named: "Favorites Active") }
-            return buttonIcon
-        }
-        cell.cellImage.image = image
-        cell.dateLabel.text = dateFormatter.string(from: Date())
-        cell.likeButton.setImage(icon(), for: .normal)
     }
 }
 
 
 extension ImagesListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: ShowSingleImageSegueIdentifier, sender: indexPath)
+        let largeImageUrl = photos[indexPath.row].largeImgaeURL
+        performSegue(withIdentifier: ShowSingleImageSegueIdentifier, sender: largeImageUrl)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        //TODO: - поменять название массива
-        let cell = tableView.dequeueReusableCell(withIdentifier: ImagesListCell.reuseIdentifier, for: indexPath)
-        guard let imageListCell = cell as? ImagesListCell,
-              let image = imageListCell.cellImage.image
-        else {
-            return 0
-        }
+
+        let photo: Photo = photos[indexPath.row]
+        let imageInsets = UIEdgeInsets(top: 4, left: 16, bottom: 4, right: 16)
+        let imageViewWidth = tableView.bounds.width - imageInsets.left - imageInsets.right
+        let imageWidth = photo.size.width
+        let scale = imageViewWidth / imageWidth
+        let cellHeight = photo.size.height * scale + imageInsets.top + imageInsets.bottom
+        return cellHeight
+    }
         
-                /*
-                 guard let image = UIImage(named: photosName[indexPath.row]) else {
-                 return 0
-                 }
-                 */
-        
-                let imageInsets = UIEdgeInsets(top: 4, left: 16, bottom: 4, right: 16)
-                let imageViewWidth = tableView.bounds.width - imageInsets.left - imageInsets.right
-                let imageWidth = image.size.width
-                let scale = imageViewWidth / imageWidth
-                let cellHeight = image.size.height * scale + imageInsets.top + imageInsets.bottom
-                return cellHeight
-            }
 }
 
 extension ImagesListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // TODO: - заменить количество ячеек
-        return photos.count // photosName.count
+        return photos.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -160,11 +158,17 @@ extension ImagesListViewController: UITableViewDataSource {
         guard let imageListCell = cell as? ImagesListCell else {
             return UITableViewCell()
         }
-        // TODO: - поменять функцию конфигурации ячейки из др массива
         configCellImageSerivce(for: imageListCell, with: indexPath)
-        //configCell(for: imageListCell, with: indexPath)
         return imageListCell
     }
 }
 
+
+extension ImagesListViewController {
+    func showAlert() {
+        let alert = UIAlertController(title: "«Что-то пошло не так(»", message: "«Не удалось cохранить лайк»", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "ОК", style: .default, handler: nil))
+        present(alert, animated: true)
+    }
+}
 

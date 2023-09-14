@@ -14,13 +14,14 @@ struct Photo {
     let welcomeDescription: String?
     let thumbImageURl: String
     let largeImgaeURL:String
-    let isLiked: Bool
+    var isLiked: Bool
   
     
     static func getPhoto(photo: PhotoResult )-> Photo {
-       let photo = Photo( id: photo.id,
+        let dateFormatter = ISO8601DateFormatter() 
+        let photo = Photo( id: photo.id,
                            size: CGSize(width: photo.sizeWight, height: photo.sizeHeight),
-                           createdAt: DateFormatter().date(from: photo.createdAt ?? "") ,
+                           createdAt: dateFormatter.date(from: (photo.createdAt ?? "")) , 
                            welcomeDescription: photo.welcomeDescription ?? "",
                            thumbImageURl: photo.urlsPhoto[Size.thumb.rawValue] ?? "",
                            largeImgaeURL: photo.urlsPhoto[Size.large.rawValue] ?? "",
@@ -30,7 +31,7 @@ struct Photo {
     
     enum Size: String {
         case thumb = "thumb"
-        case large = "large"
+        case large = "full"
     }
 }
 
@@ -62,4 +63,13 @@ struct PhotoResult: Codable {
     }
 }
 
+struct LikedPhotoResult: Decodable {
+    let photo: LikeByUserResult
+}
+struct LikeByUserResult: Decodable {
+    let likedByUser: Bool
+    private enum CodingKeys: String, CodingKey {
+        case likedByUser = "liked_by_user"
+    }
+}
 

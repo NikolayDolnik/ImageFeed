@@ -161,6 +161,16 @@
 			path = "Service Access Layer";
 			sourceTree = "<group>";
 		};
+		9949389F2AB087A6000E0849 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				99E20FA42A04FC320088A8B6 /* ImageListCell.swift */,
+				99F28F8D2A9503C500A1D59B /* Profile.swift */,
+				99F28F9C2AA7491B00A1D59B /* Photo.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		99E20F2629FD66600088A8B6 = {
 			isa = PBXGroup;
 			children = (
@@ -187,6 +197,7 @@
 				99E20F3229FD66600088A8B6 /* AppDelegate.swift */,
 				99E20F3429FD66600088A8B6 /* SceneDelegate.swift */,
 				99F28F972AA38A8D00A1D59B /* TabBarController.swift */,
+				9949389F2AB087A6000E0849 /* Models */,
 				99F28F7E2A86595800A1D59B /* Splash */,
 				9910D4682A28D2370088FEA8 /* Auth */,
 				9910D4622A1CF4F60088FEA8 /* Profile */,
@@ -222,7 +233,6 @@
 		99E20FA62A04FC7E0088A8B6 /* ImagesList */ = {
 			isa = PBXGroup;
 			children = (
-				99E20FA42A04FC320088A8B6 /* ImageListCell.swift */,
 				99E20F3629FD66600088A8B6 /* ImagesListViewController.swift */,
 			);
 			path = ImagesList;
@@ -250,7 +260,6 @@
 			isa = PBXGroup;
 			children = (
 				99F28F872A9501BE00A1D59B /* ProfileService.swift */,
-				99F28F8D2A9503C500A1D59B /* Profile.swift */,
 				99F28F8F2A9756D100A1D59B /* ProfileImageService.swift */,
 			);
 			path = Profile;
@@ -260,7 +269,6 @@
 			isa = PBXGroup;
 			children = (
 				99F28F9A2AA748AC00A1D59B /* ImageListServie.swift */,
-				99F28F9C2AA7491B00A1D59B /* Photo.swift */,
 			);
 			path = ImageListService;
 			sourceTree = "<group>";

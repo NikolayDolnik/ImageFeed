@@ -12,5 +12,6 @@ import Foundation
  let RedirectURI = "urn:ietf:wg:oauth:2.0:oob"
  let AccessScope = "public + read_user + write_likes"
  let DefaultBaseUrl = URL(string: "https://unsplash.com")!
+ let defaultApiURL = URL(string: "https://api.unsplash.com")!
 
 

@@ -6,6 +6,7 @@
 //
 import UIKit
 import Kingfisher
+import WebKit
 
 
 final class ProfileViewController: UIViewController {
@@ -74,10 +75,29 @@ final class ProfileViewController: UIViewController {
         profileView()
         loadProfile()
         updateAvatar()
-        //imageListService.fetchPhotosNextpage{ result in print(result) }
     }
     
     // MARK: - Private function
+    
+    private func logOut(){
+        OAuth2TokenStorage().token = ""
+        HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
+        WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()){ records in
+            records.forEach{ record in
+                WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {})
+            }
+        }
+        guard
+            let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+            let window = windowScene.windows.first else {
+            fatalError("Invalid Configuration")
+        }
+        let vc = SplashViewController()
+        window.rootViewController = vc
+//        let splashScreen = SplashViewController()
+//        splashScreen.modalPresentationStyle = .fullScreen
+//        present(splashScreen, animated: true)
+    }
     
     private func updateAvatar(){
         guard let profileImageURL = profileImageService.avatarURL,
@@ -126,13 +146,10 @@ final class ProfileViewController: UIViewController {
     
     @objc
     private func didTapLogOutButton() {
-        // Очистить данные?
-        self.nameLabel.text = "Необходимо авторизироваться"
-        self.loginLabel.text = ""
-        self.descriptionLabel.text = ""
-        let profileBase = UIImage(named: "tab_profile_active")
-        profileIcon.image = profileBase
-        
+        let alert = UIAlertController(title: "«Пока, пока!»", message: "«Уверенны, что хотите выйти?»", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Да", style: .default, handler: {_ in self.logOut()}))
+        alert.addAction(UIAlertAction(title: "Нет", style: .default, handler: nil))
+        present(alert, animated: true)
     }
 }
 

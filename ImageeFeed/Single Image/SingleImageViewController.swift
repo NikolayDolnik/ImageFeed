@@ -6,12 +6,15 @@
 //
 
 import UIKit
+import Kingfisher
+import ProgressHUD
 
 class SingleImageViewController: UIViewController {
+    var imageUrl: String?
     var image: UIImage! {
         didSet {
             guard isViewLoaded else { return }
-            imageView.image = image
+            // imageView.image = image
             rescaleAndCenterImageInScrollView(image: image)
         }
     }
@@ -34,10 +37,12 @@ class SingleImageViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        imageView.image = image
+        //
+        //  imageView.image = image
+        loadImage()
         scrollView.minimumZoomScale = 0.1
         scrollView.maximumZoomScale = 1.25
-        rescaleAndCenterImageInScrollView(image: image)
+        // rescaleAndCenterImageInScrollView(image: image)
     }
     
 }
@@ -48,6 +53,23 @@ extension SingleImageViewController: UIScrollViewDelegate {
     }
 }
 extension SingleImageViewController {
+    private func loadImage(){
+        UIBlockingProgressHUD.show()
+        guard imageUrl != nil, let url = URL(string: imageUrl!), let img = UIImage(named: "scribble") else { return}
+        imageView.image = img
+        self.rescaleAndCenterImageInScrollView(image: img)
+        imageView.kf.setImage(with: url){ [weak self] result in
+            UIBlockingProgressHUD.dismiss()
+            guard let self = self else {return}
+            switch result{
+            case .success(let imageResult):
+                self.image = imageResult.image
+                self.rescaleAndCenterImageInScrollView(image: imageResult.image)
+            case .failure:
+                self.showError()
+            }
+        }
+    }
     
     private func rescaleAndCenterImageInScrollView(image: UIImage) {
         let minZoomScale = scrollView.minimumZoomScale
@@ -86,4 +108,16 @@ extension SingleImageViewController {
      scrollView.contentOffset = CGPoint(x: horizontalPadding, y: verticalPadding)
      }
      */
+}
+
+extension SingleImageViewController {
+    private func showError() {
+        let alert = UIAlertController(title: "«Что-то пошло не так(»", message: "«Попробовать еще раз?»", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Не надо", style: .default, handler: nil))
+        alert.addAction(UIAlertAction(title: "Повторить", style: .default,
+                                      handler: {_ in
+            self.loadImage()
+        }))
+        present(alert, animated: true)
+    }
 }
