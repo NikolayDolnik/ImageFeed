@@ -39,7 +39,7 @@ class SplashViewController: UIViewController {
 }
 
 
-// MARK: - Функции
+// MARK: - Methods
 
 extension SplashViewController: AuthViewControllerDelegate {
     

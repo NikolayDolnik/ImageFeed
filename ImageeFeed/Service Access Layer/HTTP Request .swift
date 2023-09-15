@@ -55,7 +55,7 @@ extension URLSession {
         for reguest: URLRequest,
         completion: @escaping (Result<T,Error>)-> Void
     ) -> URLSessionTask {
-        let fulfillCompletion: (Result<T, Error>) -> Void = { result in // Data поменял на T
+        let fulfillCompletion: (Result<T, Error>) -> Void = { result in
             DispatchQueue.main.async {
                 completion(result)
             }
@@ -64,16 +64,16 @@ extension URLSession {
         let task = session.dataTask(with: reguest, completionHandler: { data, response, error in
             if let data, let response = response, let statusCode = (response as? HTTPURLResponse)?.statusCode, 200..<300 ~= statusCode {
                 
-                    do {
-                        let result = try JSONDecoder().decode(T.self , from: data) // Правильно ли тип Т
-                        fulfillCompletion(.success(result))
-                    } catch {
-                        fulfillCompletion(.failure(NetworkError.httpStatusCode(statusCode)))
-                    }
+                do {
+                    let result = try JSONDecoder().decode(T.self , from: data)
+                    fulfillCompletion(.success(result))
+                } catch {
+                    fulfillCompletion(.failure(NetworkError.httpStatusCode(statusCode)))
+                }
             } else if let error = error {
                 fulfillCompletion(.failure(NetworkError.urlRequestError(error)))
             } else {
-                fulfillCompletion(.failure(NetworkError.urlSessionError)) // Другая ошибка нуна - makeGenericError
+                fulfillCompletion(.failure(NetworkError.urlSessionError))
             }
         })
         task.resume()
@@ -83,9 +83,17 @@ extension URLSession {
 }
 
 // MARK: - Network Connection
+
 enum NetworkError: Error {
     case httpStatusCode(Int)
     case urlRequestError(Error)
     case urlSessionError
     case loadError(String)
+}
+
+class SnakeCaseJSONDecoder: JSONDecoder {
+    override init() {
+        super.init()
+        keyDecodingStrategy = .convertFromSnakeCase
+    }
 }

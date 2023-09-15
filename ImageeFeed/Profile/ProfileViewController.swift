@@ -10,6 +10,8 @@ import WebKit
 
 
 final class ProfileViewController: UIViewController {
+  
+    // MARK: - Properties
     
     private let profileService = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
@@ -63,6 +65,8 @@ final class ProfileViewController: UIViewController {
     }()
     
     
+    // MARK: - LifeCycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         profileImageServiceObserver = NotificationCenter.default.addObserver(
@@ -77,7 +81,7 @@ final class ProfileViewController: UIViewController {
         updateAvatar()
     }
     
-    // MARK: - Private function
+    // MARK: - Private Methods
     
     private func logOut(){
         OAuth2TokenStorage().token = ""

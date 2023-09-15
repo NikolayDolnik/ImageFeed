@@ -11,6 +11,9 @@ import WebKit
 
 final class WebViewViewController: UIViewController {
     
+    
+    // MARK: - IBOutlet & IBOaction
+    
     @IBOutlet private var progressView: UIProgressView!
     @IBOutlet private var webView: WKWebView!
     
@@ -20,6 +23,9 @@ final class WebViewViewController: UIViewController {
     private var estimatedProgressObservation: NSKeyValueObservation?
     var UnsplashAuthorizeURLString = "https://unsplash.com/oauth/authorize"
     weak var delegate: WebViewViewControllerDelegate?
+    
+    
+    // MARK: - LifeCycle
     
     override func viewDidLoad() {
        super.viewDidLoad() 
@@ -58,6 +64,9 @@ final class WebViewViewController: UIViewController {
         progressView.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.0001
     }
 }
+
+
+// MARK: - WKNavigationDelegate
 
 extension WebViewViewController: WKNavigationDelegate {
     private func code(from navigationAction: WKNavigationAction) -> String? {

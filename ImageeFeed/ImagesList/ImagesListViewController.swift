@@ -11,6 +11,9 @@ import ProgressHUD
 
 
 class ImagesListViewController: UIViewController {
+    
+      // MARK: - Properties
+    
     private let ShowSingleImageSegueIdentifier = "ShowSingleImage"
     private let imageListService = ImageListService.shared
     private var imageListServiceObserver: NSObjectProtocol?
@@ -21,17 +24,19 @@ class ImagesListViewController: UIViewController {
     private let photosName: [String] = Array(0..<20).map{"\($0)"}
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateStyle = .medium
+        formatter.locale = Locale(identifier: "en_GB")
+        formatter.dateStyle = .long
         formatter.timeStyle = .none
         return formatter
     }()
     
+    // MARK: - LifeCycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
         imageListServiceObserver = NotificationCenter.default.addObserver(
-            forName: ImageListService.DidChangeNotification,
+            forName: ImageListService.didChangeNotification,
             object: nil,
             queue: .main) { [weak self] _ in
                 guard let self else {return}
@@ -57,12 +62,10 @@ class ImagesListViewController: UIViewController {
 extension ImagesListViewController {
     
     func updateTableViewAnimated(){
-        //вызывается по нотификации и обновляет состояние таблицы
         let count = photos.count
         let newCount = imageListService.photos.count
         
         if count != newCount {
-            //добавляем новые ячейки
             self.photos = imageListService.photos
             var indexPath: [IndexPath] = []
             for i in count..<newCount {
@@ -75,7 +78,6 @@ extension ImagesListViewController {
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        //Проверить условие последней ячейки и вызывать fetchPhotos.. если индекс последняя строка в таблице
         if indexPath.row + 1 == photos.count {
             imageListService.fetchPhotosNextpage()
         }
@@ -91,7 +93,6 @@ extension ImagesListViewController {
         if let createdAd = photo.createdAt {
             cell.dateLabel.text = dateFormatter.string(from: createdAd)
         } else {
-            print("Date - \(photo.createdAt)")
             cell.dateLabel.text = ""
         }
         cell.delegate = self
@@ -166,8 +167,14 @@ extension ImagesListViewController: UITableViewDataSource {
 
 extension ImagesListViewController {
     func showAlert() {
-        let alert = UIAlertController(title: "«Что-то пошло не так(»", message: "«Не удалось cохранить лайк»", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "ОК", style: .default, handler: nil))
+        let alert = UIAlertController(
+            title: "«Что-то пошло не так(»",
+            message: "«Не удалось cохранить лайк»",
+            preferredStyle: .alert
+        )
+        alert.addAction(
+            UIAlertAction(title: "ОК", style: .default, handler: nil
+                         ))
         present(alert, animated: true)
     }
 }

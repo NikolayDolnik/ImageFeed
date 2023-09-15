@@ -8,47 +8,44 @@
 import UIKit
 
 final class ImageListService {
+    
+    // MARK: - Properties
+    
     private var lastLoadedPage: Int?
     private (set) var photos: [Photo] = []
     private let urlSession = URLSession.shared
     private let token = OAuth2TokenStorage().token
     private var taskFree: Bool = true
     static let shared = ImageListService()
-    static let DidChangeNotification = Notification.Name(rawValue: "ImageListServiceDidChange")
+    static let didChangeNotification = Notification.Name(rawValue: "ImageListServiceDidChange")
     
     func fetchPhotosNextpage(){
-        // оределить номер с которой загружаем страницу, не как параметр функции
-        //если идет закачка, то новый запрос не создается
         assert(Thread.isMainThread)
         guard taskFree else { return }
         var page = lastLoadedPage == nil ? 0 : lastLoadedPage!
         page+=1
         
-        //Делаем загрузку нужной странички - получаем массив из 10 карточек
-        
         photoPageReguest(page: page, completion: { [weak self] result in
             guard let self = self else { return }
-            switch result{
+            switch result {
             case .success(let photos):
                 self.photos += photos
                 self.taskFree = true
                 NotificationCenter.default
                     .post(
-                        name: ImageListService.DidChangeNotification,
+                        name: ImageListService.didChangeNotification,
                         object: self,
                         userInfo: ["URL": self.photos])
             case .failure:
-                print("Ошибка")
+                print("Ошибка photoPageReguest")
             }
         })
     }
-
-    
 }
 
+
 extension ImageListService {
-     func likeChangeReguest(photo: Photo, completion: @escaping (Result<[Photo], Error>)->Void){
-         // отменить задачу, если она уже есть
+    func likeChangeReguest(photo: Photo, completion: @escaping (Result<[Photo], Error>)->Void){
         var request = URLRequest.makeHTTPRequest(
             path: "/photos"
             + "/\(photo.id)"
@@ -57,7 +54,7 @@ extension ImageListService {
             baseURL: defaultApiURL
         )
         request.setValue("Bearer \(token))", forHTTPHeaderField: "Authorization")
-         let task = urlSession.objectTask(for: request, completion: { [weak self] (result: Result<LikedPhotoResult, Error>) in
+        let task = urlSession.objectTask(for: request, completion: { [weak self] (result: Result<LikedPhotoResult, Error>) in
             guard let self = self else { return print("Ошибка загрузки страницы с фото") }
             switch result{
             case .success(let result):
@@ -81,12 +78,10 @@ extension ImageListService {
         })
         task.resume()
     }
-    
-    
-    
+
     private func photoPageReguest(page: Int, completion: @escaping (Result<[Photo], Error>)->Void ) {
         let url = URL(string: "https://api.unsplash.com/photos")!
-        let perPage = 10 //количество картинок на странице
+        let perPage = 10
         var request = URLRequest.makeHTTPRequest(
             path: "?page=\(page)"
             + "&&per_page=\(perPage)"
@@ -104,7 +99,7 @@ extension ImageListService {
                     let photo = Photo.getPhoto(photo: index)
                     photos.append(photo)
                 }
-               // print(photoResult)
+                // print(photoResult)
                 completion(.success(photos))
             case .failure(let error):
                 completion(.failure(error))
@@ -114,20 +109,7 @@ extension ImageListService {
         self.lastLoadedPage = page
         task.resume()
     }
-    
-    private func photoPageRequest(page: Int) -> URLRequest {
-        let url = URL(string: "https://api.unsplash.com/photos")!
-        let perPage = 10 //количество картинок на странице
-        return URLRequest.makeHTTPRequest(
-            path: "?page=\(page)"
-            + "&&per_page=\(perPage)"
-            + "&&order_by=popular",
-            httpMethod: "GET",
-            baseURL: url
-        )
-    }
-    
 }
- 
+
 
 

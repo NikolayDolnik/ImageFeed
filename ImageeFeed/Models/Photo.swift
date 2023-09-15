@@ -15,23 +15,16 @@ struct Photo {
     let thumbImageURl: String
     let largeImgaeURL:String
     var isLiked: Bool
-  
     
     static func getPhoto(photo: PhotoResult )-> Photo {
-        let dateFormatter = ISO8601DateFormatter() 
         let photo = Photo( id: photo.id,
                            size: CGSize(width: photo.sizeWight, height: photo.sizeHeight),
-                           createdAt: dateFormatter.date(from: (photo.createdAt ?? "")) , 
+                           createdAt: dateFormatterISO8601.date(from: (photo.createdAt ?? "")) ,
                            welcomeDescription: photo.welcomeDescription ?? "",
-                           thumbImageURl: photo.urlsPhoto[Size.thumb.rawValue] ?? "",
-                           largeImgaeURL: photo.urlsPhoto[Size.large.rawValue] ?? "",
+                           thumbImageURl: photo.urlsPhoto.thumb,
+                           largeImgaeURL: photo.urlsPhoto.full,
                            isLiked: photo.isLiked)
         return photo
-    }
-    
-    enum Size: String {
-        case thumb = "thumb"
-        case large = "full"
     }
 }
 
@@ -46,7 +39,7 @@ struct PhotoResult: Codable {
     let likes: Int
     let welcomeDescription: String?
     let isLiked: Bool
-    let urlsPhoto: [String:String]
+    let urlsPhoto: UrlsResult
 
     private enum CodingKeys: String, CodingKey {
         case id = "id"
@@ -61,6 +54,19 @@ struct PhotoResult: Codable {
         case urlsPhoto = "urls"
         case isLiked = "liked_by_user"
     }
+}
+
+struct UrlsResult: Codable {
+    let full: String
+    let small: String
+    let thumb: String
+    
+    enum CodingKeys: String, CodingKey {
+        case  full = "full"
+        case small = "small"
+        case thumb = "thumb"
+    }
+    
 }
 
 struct LikedPhotoResult: Decodable {

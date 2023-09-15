@@ -8,19 +8,16 @@
 import UIKit
 import Kingfisher
 
-class ImagesListCell: UITableViewCell {
+final class ImagesListCell: UITableViewCell {
+    
     static let reuseIdentifier = "ImagesListCell"
     weak var delegate: ImagesListCellDelegate?
-    
     @IBOutlet var cellImage: UIImageView!
     @IBOutlet var likeButton: UIButton!
     @IBOutlet var dateLabel: UILabel!
-     
     
     @IBAction private func LikeButtonClicked() {
-        //нужно создать метод в ячейке и связать его с действием на кнопку Touch Up Inside
         delegate?.imageListCellDidTapLike(self)
-        
     }
     
     func setIsLike(like: Bool) {
@@ -30,7 +27,6 @@ class ImagesListCell: UITableViewCell {
     override func prepareForReuse() {
         cellImage.kf.cancelDownloadTask()
     }
-
 }
 
 protocol ImagesListCellDelegate: AnyObject {

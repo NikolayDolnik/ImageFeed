@@ -28,7 +28,6 @@ struct Profile: Codable {
     var logineName: String
     var bio: String
    
-    // поменять на инит 
     static func getProfile(_ profileInfo: ProfileResult) -> Profile {
         let profile = Profile(
             userName: profileInfo.userName,

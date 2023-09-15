@@ -84,13 +84,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
 }
-
-//extension AppDelegate {
-//    static var shared: AppDelegate{
-//        return UIApplication.shared.delegate as! AppDelegate
-//    }
-//    
-//    var rootViewController: UIViewController {
-//       return SplashViewController()
-//    }
-//}

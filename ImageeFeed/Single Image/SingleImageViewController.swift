@@ -9,15 +9,17 @@ import UIKit
 import Kingfisher
 import ProgressHUD
 
-class SingleImageViewController: UIViewController {
+final class SingleImageViewController: UIViewController {
+    
     var imageUrl: String?
     var image: UIImage! {
         didSet {
             guard isViewLoaded else { return }
-            // imageView.image = image
             rescaleAndCenterImageInScrollView(image: image)
         }
     }
+
+    // MARK: - IBOutlet & IBOaction
     
     @IBOutlet private var imageView: UIImageView!
     @IBOutlet private var scrollView: UIScrollView!
@@ -33,16 +35,15 @@ class SingleImageViewController: UIViewController {
         )
         present(share, animated: true, completion: nil)
     }
+
     
+    // MARK: - LifeCycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //
-        //  imageView.image = image
         loadImage()
         scrollView.minimumZoomScale = 0.1
         scrollView.maximumZoomScale = 1.25
-        // rescaleAndCenterImageInScrollView(image: image)
     }
     
 }
@@ -52,6 +53,9 @@ extension SingleImageViewController: UIScrollViewDelegate {
         imageView
     }
 }
+
+// MARK: - Private Methods
+
 extension SingleImageViewController {
     private func loadImage(){
         UIBlockingProgressHUD.show()
@@ -88,36 +92,29 @@ extension SingleImageViewController {
         scrollView.setContentOffset(CGPoint(x: x, y: y), animated: false)
     }
     
-    /*
-     private func rescaleAndCenterImageInScrollView(image: UIImage) {
-     let visibleRectSize = scrollView.bounds.size
-     let imageSize = image.size
-     let hScale = visibleRectSize.width / imageSize.width
-     let vScale = visibleRectSize.height / imageSize.height
-     let scale = min(scrollView.maximumZoomScale, max(scrollView.minimumZoomScale, min(hScale, vScale)))
-     let targetWidth = imageSize.width * scale
-     let targetHeight = imageSize.height * scale
-     bigSinglePicture.frame = CGRect(x: 0, y: 0, width: targetWidth, height: targetHeight)
-     scrollView.contentSize = bigSinglePicture.frame.size
-     view.layoutIfNeeded()
-     scrollView.layoutIfNeeded()
-     scrollView.zoomScale = scale
-     let verticalPadding =  max(0, (scrollView.contentSize.height - scrollView.bounds.height) / 2)
-     
-     let horizontalPadding =  max(0, (scrollView.contentSize.width - scrollView.bounds.width) / 2)
-     scrollView.contentOffset = CGPoint(x: horizontalPadding, y: verticalPadding)
-     }
-     */
 }
 
 extension SingleImageViewController {
     private func showError() {
-        let alert = UIAlertController(title: "«Что-то пошло не так(»", message: "«Попробовать еще раз?»", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Не надо", style: .default, handler: nil))
-        alert.addAction(UIAlertAction(title: "Повторить", style: .default,
-                                      handler: {_ in
-            self.loadImage()
-        }))
+        let alert = UIAlertController(
+            title: "«Что-то пошло не так(»",
+            message: "«Попробовать еще раз?»",
+            preferredStyle: .alert
+        )
+        alert.addAction(
+            UIAlertAction(
+                title: "Не надо",
+                style: .default
+            )
+        )
+        alert.addAction(
+            UIAlertAction(
+                title: "Повторить",
+                style: .default
+                ) { _ in
+                    self.loadImage()
+                }
+        )
         present(alert, animated: true)
     }
 }
