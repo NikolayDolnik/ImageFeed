@@ -59,10 +59,12 @@ extension SingleImageViewController: UIScrollViewDelegate {
 extension SingleImageViewController {
     private func loadImage(){
         UIBlockingProgressHUD.show()
-        guard imageUrl != nil, let url = URL(string: imageUrl!), let img = UIImage(named: "scribble") else { return}
-        imageView.image = img
-        self.rescaleAndCenterImageInScrollView(image: img)
-        imageView.kf.setImage(with: url){ [weak self] result in
+        guard imageUrl != nil,
+              let url = URL(string: imageUrl!),
+              let img = UIImage(named: "scribble") else { return}
+        imageView.image = img 
+        self.rescaleAndCenterImageInScrollView(image: imageView.image!)
+        imageView.kf.setImage(with: url, placeholder: img){ [weak self] result in
             UIBlockingProgressHUD.dismiss()
             guard let self = self else {return}
             switch result{

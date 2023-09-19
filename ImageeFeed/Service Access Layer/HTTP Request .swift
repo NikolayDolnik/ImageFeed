@@ -73,6 +73,7 @@ extension URLSession {
             } else if let error = error {
                 fulfillCompletion(.failure(NetworkError.urlRequestError(error)))
             } else {
+               
                 fulfillCompletion(.failure(NetworkError.urlSessionError))
             }
         })

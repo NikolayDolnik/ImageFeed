@@ -87,8 +87,6 @@ extension ImagesListViewController {
         
         let photo: Photo = photos[indexPath.row]
         let image = UIImage(named: "scribble")
-        cell.cellImage.image = image
-        
         guard let url = URL(string: photo.thumbImageURl) else { return}
         if let createdAd = photo.createdAt {
             cell.dateLabel.text = dateFormatter.string(from: createdAd)
@@ -98,7 +96,7 @@ extension ImagesListViewController {
         cell.delegate = self
         cell.cellImage.kf.indicatorType = .activity
         cell.cellImage.kf.indicator?.startAnimatingView()
-        cell.cellImage.kf.setImage(with: url){_ in
+        cell.cellImage.kf.setImage(with: url, placeholder: image ){ _ in
             cell.cellImage.kf.indicator?.stopAnimatingView()
             self.tableView.reloadRows(at: [indexPath], with: .automatic)
         }
