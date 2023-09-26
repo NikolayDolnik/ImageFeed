@@ -8,7 +8,7 @@
 import UIKit
 import Kingfisher
 
-final class ImagesListCell: UITableViewCell {
+public final class ImagesListCell: UITableViewCell {
     
     static let reuseIdentifier = "ImagesListCell"
     weak var delegate: ImagesListCellDelegate?
@@ -24,7 +24,7 @@ final class ImagesListCell: UITableViewCell {
         likeButton.setImage(!like ? UIImage(named: "Favorites Active") : UIImage(named: "Favorites No Active"), for: .normal)
     }
     
-    override func prepareForReuse() {
+    public override func prepareForReuse() {
         cellImage.kf.cancelDownloadTask()
     }
 }

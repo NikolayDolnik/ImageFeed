@@ -7,7 +7,11 @@
 
 import Foundation
 
-final class ProfileImageService {
+public protocol ProfileImageServiceProtocol {
+    var avatarURL: String? {get}
+}
+
+final class ProfileImageService: ProfileImageServiceProtocol {
     static let DidChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
     static let shared = ProfileImageService()
     private (set) var avatarURL: String?

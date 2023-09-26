@@ -18,8 +18,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eaN-SG-JwZ">
+                            <button opaque="NO" contentMode="scaleToFill" restorationIdentifier="Authenticate" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eaN-SG-JwZ">
                                 <rect key="frame" x="16" y="680" width="361" height="48"/>
+                                <accessibility key="accessibilityConfiguration" identifier="Authenticate"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="L2H-BS-L11"/>
                                 </constraints>
@@ -68,7 +69,7 @@
         <!--Web View View Controller-->
         <scene sceneID="yS7-to-pwB">
             <objects>
-                <viewController storyboardIdentifier="WebViewController" id="Qnl-hF-YQa" customClass="WebViewViewController" customModule="ImageeFeed" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="WebViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Qnl-hF-YQa" customClass="WebViewViewController" customModule="ImageeFeed" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="3x1-u5-uZ7">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -125,7 +126,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="CsW-QI-3Cl">
             <objects>
-                <tabBarController storyboardIdentifier="tabBar" id="JlI-tW-aGl" customClass="TabBarController" customModule="ImageeFeed" customModuleProvider="target" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="tabBar" useStoryboardIdentifierAsRestorationIdentifier="YES" id="JlI-tW-aGl" customClass="TabBarController" customModule="ImageeFeed" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="ZAs-WN-5cL"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="8Y0-Ie-GRz">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="49"/>
@@ -168,8 +169,9 @@
                                     <outlet property="delegate" destination="h2f-Kq-vQp" id="aX1-uf-VMK"/>
                                 </connections>
                             </scrollView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aML-ET-BWX">
+                            <button opaque="NO" contentMode="scaleToFill" restorationIdentifier="back" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aML-ET-BWX">
                                 <rect key="frame" x="8" y="67" width="44" height="44"/>
+                                <accessibility key="accessibilityConfiguration" identifier="back"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="44" id="MJ7-K8-1pj"/>
                                     <constraint firstAttribute="height" constant="44" id="Mht-RX-Nd4"/>

@@ -19,6 +19,11 @@
 		9936D5142AB5CAC000BBF889 /* WebViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9936D5132AB5CAC000BBF889 /* WebViewPresenter.swift */; };
 		9936D5162AB5DBB800BBF889 /* AuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9936D5152AB5DBB800BBF889 /* AuthHelper.swift */; };
 		994162202A1678A400620104 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9941621F2A1678A400620104 /* ProfileViewController.swift */; };
+		99DAD9F32AB9C3BA004467A3 /* ProfileViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DAD9F22AB9C3BA004467A3 /* ProfileViewPresenter.swift */; };
+		99DAD9F52AB9CD13004467A3 /* Extension & Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DAD9F42AB9CD13004467A3 /* Extension & Constant.swift */; };
+		99DAD9F72AB9E67F004467A3 /* ImageListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DAD9F62AB9E67F004467A3 /* ImageListPresenter.swift */; };
+		99DAD9F92ABC8DBF004467A3 /* ImageListTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DAD9F82ABC8DBF004467A3 /* ImageListTest.swift */; };
+		99DAD9FB2AC0BCB9004467A3 /* ProfileViewTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DAD9FA2AC0BCB9004467A3 /* ProfileViewTest.swift */; };
 		99E20F3329FD66600088A8B6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99E20F3229FD66600088A8B6 /* AppDelegate.swift */; };
 		99E20F3529FD66600088A8B6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99E20F3429FD66600088A8B6 /* SceneDelegate.swift */; };
 		99E20F3729FD66600088A8B6 /* ImagesListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99E20F3629FD66600088A8B6 /* ImagesListViewController.swift */; };
@@ -73,6 +78,11 @@
 		9936D5132AB5CAC000BBF889 /* WebViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewPresenter.swift; sourceTree = "<group>"; };
 		9936D5152AB5DBB800BBF889 /* AuthHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthHelper.swift; sourceTree = "<group>"; };
 		9941621F2A1678A400620104 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		99DAD9F22AB9C3BA004467A3 /* ProfileViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewPresenter.swift; sourceTree = "<group>"; };
+		99DAD9F42AB9CD13004467A3 /* Extension & Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension & Constant.swift"; sourceTree = "<group>"; };
+		99DAD9F62AB9E67F004467A3 /* ImageListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageListPresenter.swift; sourceTree = "<group>"; };
+		99DAD9F82ABC8DBF004467A3 /* ImageListTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageListTest.swift; sourceTree = "<group>"; };
+		99DAD9FA2AC0BCB9004467A3 /* ProfileViewTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewTest.swift; sourceTree = "<group>"; };
 		99E20F2F29FD66600088A8B6 /* ImageeFeed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageeFeed.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		99E20F3229FD66600088A8B6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		99E20F3429FD66600088A8B6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -129,6 +139,7 @@
 		9910D4622A1CF4F60088FEA8 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				99DAD9F22AB9C3BA004467A3 /* ProfileViewPresenter.swift */,
 				9941621F2A1678A400620104 /* ProfileViewController.swift */,
 			);
 			path = Profile;
@@ -202,6 +213,7 @@
 			children = (
 				99E20F3229FD66600088A8B6 /* AppDelegate.swift */,
 				99E20F3429FD66600088A8B6 /* SceneDelegate.swift */,
+				99DAD9F42AB9CD13004467A3 /* Extension & Constant.swift */,
 				99F28F972AA38A8D00A1D59B /* TabBarController.swift */,
 				9949389F2AB087A6000E0849 /* Models */,
 				99F28F7E2A86595800A1D59B /* Splash */,
@@ -223,6 +235,8 @@
 			isa = PBXGroup;
 			children = (
 				99E20F4C29FD66610088A8B6 /* ImageeFeedTests.swift */,
+				99DAD9F82ABC8DBF004467A3 /* ImageListTest.swift */,
+				99DAD9FA2AC0BCB9004467A3 /* ProfileViewTest.swift */,
 			);
 			path = ImageeFeedTests;
 			sourceTree = "<group>";
@@ -240,6 +254,7 @@
 			isa = PBXGroup;
 			children = (
 				99E20F3629FD66600088A8B6 /* ImagesListViewController.swift */,
+				99DAD9F62AB9E67F004467A3 /* ImageListPresenter.swift */,
 			);
 			path = ImagesList;
 			sourceTree = "<group>";
@@ -425,14 +440,17 @@
 				9910D46F2A2F68DA0088FEA8 /* OAuth2Service.swift in Sources */,
 				99E20F3729FD66600088A8B6 /* ImagesListViewController.swift in Sources */,
 				99E20FA52A04FC320088A8B6 /* ImageListCell.swift in Sources */,
+				99DAD9F32AB9C3BA004467A3 /* ProfileViewPresenter.swift in Sources */,
 				9910D4712A2F68F90088FEA8 /* OAuthTokenResponseBody.swift in Sources */,
 				9910D4732A2F834F0088FEA8 /* OAuth2TokenStorage.swift in Sources */,
 				9936D5162AB5DBB800BBF889 /* AuthHelper.swift in Sources */,
 				9910D4612A1CB2580088FEA8 /* SingleImageViewController.swift in Sources */,
+				99DAD9F52AB9CD13004467A3 /* Extension & Constant.swift in Sources */,
 				99E20F3329FD66600088A8B6 /* AppDelegate.swift in Sources */,
 				99E20F3529FD66600088A8B6 /* SceneDelegate.swift in Sources */,
 				9936D5142AB5CAC000BBF889 /* WebViewPresenter.swift in Sources */,
 				9910D4752A30B7990088FEA8 /* HTTP Request .swift in Sources */,
+				99DAD9F72AB9E67F004467A3 /* ImageListPresenter.swift in Sources */,
 				99F28F882A9501BE00A1D59B /* ProfileService.swift in Sources */,
 				9910D46C2A28E6C00088FEA8 /* WebViewViewControllerDelegate.swift in Sources */,
 				99E20F3D29FD66600088A8B6 /* ImageeFeed.xcdatamodeld in Sources */,
@@ -453,6 +471,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				99E20F4D29FD66610088A8B6 /* ImageeFeedTests.swift in Sources */,
+				99DAD9FB2AC0BCB9004467A3 /* ProfileViewTest.swift in Sources */,
+				99DAD9F92ABC8DBF004467A3 /* ImageListTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

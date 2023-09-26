@@ -22,7 +22,7 @@ struct ProfileResult: Codable {
     }
 }
 
-struct Profile: Codable {
+public struct Profile: Codable {
     var userName: String
     var name: String
     var logineName: String

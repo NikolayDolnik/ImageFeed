@@ -8,15 +8,20 @@ import UIKit
 import Kingfisher
 import WebKit
 
+public protocol ProfileViewControllerProtocol: AnyObject {
+    var presenter: ProfileViewPresenterProtocol? {get set}
+    func updateAvatar(from url:URL)
+    func loadProfile(_ profile: Profile?)
+    func updateAvatarError()
+    func configure(_ presenter: ProfileViewPresenterProtocol)
+}
 
-final class ProfileViewController: UIViewController {
-  
+final class ProfileViewController: UIViewController, ProfileViewControllerProtocol {
+   
     // MARK: - Properties
-    
-    private let profileService = ProfileService.shared
-    private let profileImageService = ProfileImageService.shared
+
     private var profileImageServiceObserver: NSObjectProtocol?
-    //private let imageListService = ImageListService()
+    var presenter: ProfileViewPresenterProtocol?
     
     private lazy var profileIcon: UIImageView = {
         let profileImage = UIImage(named: "Profile")
@@ -26,7 +31,7 @@ final class ProfileViewController: UIViewController {
         return profileIcon
     }()
     
-    private lazy var nameLabel: UILabel = {
+   lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.text = "Екатерина Новикова"
         label.font = UIFont.systemFont(ofSize: 23, weight: .bold)
@@ -35,7 +40,7 @@ final class ProfileViewController: UIViewController {
         return label
     }()
     
-    private lazy var loginLabel: UILabel = {
+    lazy var loginLabel: UILabel = {
         let loginLabel = UILabel()
         loginLabel.text = "@ekaterina_nov"
         loginLabel.font = UIFont.systemFont(ofSize: 13)
@@ -44,7 +49,7 @@ final class ProfileViewController: UIViewController {
         return loginLabel
     }()
     
-    private lazy var descriptionLabel: UILabel = {
+    lazy var descriptionLabel: UILabel = {
         let descriptionLabel = UILabel()
         descriptionLabel.text = "Hello, World!"
         descriptionLabel.font = UIFont.systemFont(ofSize: 13)
@@ -60,6 +65,7 @@ final class ProfileViewController: UIViewController {
             target: self,
             action: #selector(Self.didTapLogOutButton)
         )
+        logOutButton.accessibilityIdentifier = "logout_button"
         logOutButton.translatesAutoresizingMaskIntoConstraints = false
         return logOutButton
     }()
@@ -69,53 +75,31 @@ final class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        profileImageServiceObserver = NotificationCenter.default.addObserver(
-            forName: ProfileImageService.DidChangeNotification,
-            object: nil,
-            queue: .main) { [weak self] _ in
-                guard let self else {return}
-                self.updateAvatar()
-            }
         profileView()
-        loadProfile()
-        updateAvatar()
+        presenter?.logIn()
+        loadProfile(presenter?.profile())
     }
     
-    // MARK: - Private Methods
+    // MARK: - Methods
     
-    private func logOut(){
-        OAuth2TokenStorage().token = ""
-        HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
-        WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()){ records in
-            records.forEach{ record in
-                WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {})
-            }
-        }
-        guard
-            let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-            let window = windowScene.windows.first else {
-            fatalError("Invalid Configuration")
-        }
-        let vc = SplashViewController()
-        window.rootViewController = vc
-//        let splashScreen = SplashViewController()
-//        splashScreen.modalPresentationStyle = .fullScreen
-//        present(splashScreen, animated: true)
+    func configure(_ presenter: ProfileViewPresenterProtocol){
+        self.presenter = presenter
+        presenter.view = self
     }
     
-    private func updateAvatar(){
-        guard let profileImageURL = profileImageService.avatarURL,
-              let url = URL(string: profileImageURL)
-        else { return }
+    func updateAvatar(from url:URL){
         let processor = RoundCornerImageProcessor(cornerRadius: 35)
         profileIcon.kf.setImage(with: url, options: [.processor(processor)])
     }
     
-    private func loadProfile() {
-        guard let profile = profileService.profile else {return print("ошибка обновления UI") }
-        self.nameLabel.text = profile.name
-        self.loginLabel.text = profile.logineName
-        self.descriptionLabel.text = profile.bio
+    func updateAvatarError(){
+        showAlert(title: "Ошибка", message: "Не удалось загрузить аватар", actions: nil)
+    }
+    
+    func loadProfile(_ profile: Profile?) {
+        self.nameLabel.text = profile?.name ?? ""
+        self.loginLabel.text = profile?.logineName ?? ""
+        self.descriptionLabel.text = profile?.bio ?? ""
     }
     
     
@@ -146,17 +130,15 @@ final class ProfileViewController: UIViewController {
             logOutButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 45),
             logOutButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16)
         ])
+        self.presenter?.updateAvatar()
     }
     
     @objc
     private func didTapLogOutButton() {
-        let alert = UIAlertController(title: "«Пока, пока!»", message: "«Уверенны, что хотите выйти?»", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Да", style: .default, handler: {_ in self.logOut()}))
-        alert.addAction(UIAlertAction(title: "Нет", style: .default, handler: nil))
-        present(alert, animated: true)
+        var actions: [UIAlertAction] =  [UIAlertAction(title: "Да", style: .default, handler: {_ in self.presenter?.logOut()})]
+        actions.append(UIAlertAction(title: "Нет", style: .default, handler: nil))
+        showAlert(title: "«Пока, пока!»", message: "«Уверенны, что хотите выйти?»", actions: actions)
     }
 }
 
-extension UIColor {
-    static let ypBlack = UIColor(named: "YP Black")
-}
+

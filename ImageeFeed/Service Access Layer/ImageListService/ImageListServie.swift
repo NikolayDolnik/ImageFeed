@@ -7,7 +7,13 @@
 
 import UIKit
 
-final class ImageListService {
+public protocol ImageListServiceProtocol {
+    var photos: [Photo] {get}
+    func fetchPhotosNextpage()
+    func likeChangeReguest(photo: Photo, completion: @escaping (Result<[Photo], Error>)->Void)
+}
+
+final class ImageListService: ImageListServiceProtocol {
     
     // MARK: - Properties
     
